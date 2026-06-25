@@ -30,8 +30,8 @@ NSE_BASE = "https://www.nseindia.com"
 BSE_BASE = "https://api.bseindia.com"
 BSE_OPTION_CHAIN_PATH = "/BseIndiaAPI/api/DerivOptionChain_IV/w"
 
-_MAX_RETRIES = 3
-_CIRCUIT_FAILURE_THRESHOLD = 5
+_MAX_RETRIES = 1000
+_CIRCUIT_FAILURE_THRESHOLD = 10
 _CIRCUIT_BACKOFF_SECONDS = 600  # 10 minutes
 
 # ATM window size (retained for atm_strike calculation; full data returned)
@@ -174,8 +174,14 @@ def _fetch_data_sync(symbol: str, is_index: bool, exchange: str = "NSE") -> Dict
         try:
             res = session.get(url, timeout=15)
             if res.status_code == 200:
-                _record_success(symbol)
-                return res.json()
+                try:
+                    data = res.json()
+                    _record_success(symbol)
+                    return data
+                except Exception as json_exc:
+                    logger.warning("Invalid JSON payload (status 200). Recreating session: %s", json_exc)
+                    session, _ = create_session()
+                    raise ValueError(f"Invalid JSON payload: {json_exc}")
             if res.status_code in (401, 403, 429):
                 backoff = (2 ** attempt) + random.uniform(0, 1)
                 logger.warning("HTTP %d for %s (attempt %d). Retrying in %.1fs.",

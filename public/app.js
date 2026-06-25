@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggleBtn.textContent = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
     });
 
+    let autoRefreshInterval = null;
+    let isFetching = false;
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -33,12 +36,25 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!symbol) return;
 
-        // UI Reset
+        // UI Reset (Only on initial manual load)
         errorMsg.style.display = 'none';
         resultsDiv.style.display = 'none';
         loader.style.display = 'block';
         submitBtn.disabled = true;
 
+        await fetchData(symbol, isIndex, exchange, true);
+
+        // Start auto-refresh in the background every 1 minute
+        if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+        autoRefreshInterval = setInterval(() => {
+            fetchData(symbol, isIndex, exchange, false);
+        }, 60000); 
+    });
+
+    async function fetchData(symbol, isIndex, exchange, isInitialLoad) {
+        if (isFetching) return;
+        isFetching = true;
+        
         try {
             const url = `/api/options?symbol=${symbol}&is_index=${isIndex}&exchange=${exchange}`;
             const response = await fetch(url);
@@ -50,15 +66,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
             renderData(data);
             
-            resultsDiv.style.display = 'block';
+            if (isInitialLoad) {
+                resultsDiv.style.display = 'block';
+            }
+            
+            errorMsg.style.display = 'none';
+            document.getElementById('last-updated').textContent = `Live Data • Last updated: ${new Date().toLocaleTimeString()}`;
+            document.getElementById('last-updated').style.color = '#787b86';
+            
         } catch (error) {
-            errorMsg.textContent = error.message;
-            errorMsg.style.display = 'block';
+            console.error("Fetch error:", error);
+            if (isInitialLoad) {
+                errorMsg.textContent = error.message;
+                errorMsg.style.display = 'block';
+            } else {
+                // For background polling, just update the status text instead of hiding data
+                document.getElementById('last-updated').textContent = `Background update failed • Last updated: ${new Date().toLocaleTimeString()} (Retrying soon)`;
+                document.getElementById('last-updated').style.color = 'var(--put-color)';
+            }
         } finally {
-            loader.style.display = 'none';
-            submitBtn.disabled = false;
+            if (isInitialLoad) {
+                loader.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+            isFetching = false;
         }
-    });
+    }
 
     function renderData(data) {
         // Render Summary

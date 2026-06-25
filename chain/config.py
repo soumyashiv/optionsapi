@@ -6,7 +6,7 @@ load_dotenv()
 
 # ── NSE Polling ───────────────────────────────────────────────────────────
 NSE_SYMBOLS: List[str] = [s.strip() for s in os.getenv("SYMBOLS", "NIFTY").split(",") if s.strip()]
-POLL_INTERVAL_SECONDS: int = int(os.getenv("POLL_INTERVAL_SECONDS", "120"))  # 2-minute target
+POLL_INTERVAL_SECONDS: int = int(os.getenv("POLL_INTERVAL_SECONDS", "60"))  # 2-minute target
 # Jitter bounds: ±25% around the 2min target gives 90–150s spacing.
 POLL_MIN_SECONDS: int = POLL_INTERVAL_SECONDS - (POLL_INTERVAL_SECONDS // 4)   # 90s floor
 POLL_MAX_SECONDS: int = POLL_INTERVAL_SECONDS + (POLL_INTERVAL_SECONDS // 4)   # 150s ceiling
