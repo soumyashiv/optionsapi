@@ -1,0 +1,246 @@
+:root {
+  /* Light Theme (default or via toggle) */
+  --bg-color: #ffffff;
+  --text-color: #131722;
+  --panel-bg: #f8f9fd;
+  --border-color: #e0e3eb;
+  --call-color: #26A69A;
+  --put-color: #EF5350;
+  --call-bg: rgba(38, 166, 154, 0.1);
+  --put-bg: rgba(239, 83, 80, 0.1);
+  --atm-bg: rgba(41, 98, 255, 0.15);
+  --primary-color: #2962FF;
+  --header-bg: #f0f3fa;
+}
+
+[data-theme="dark"] {
+  --bg-color: #131722;
+  --text-color: #d1d4dc;
+  --panel-bg: #1e222d;
+  --border-color: #2a2e39;
+  --call-bg: rgba(38, 166, 154, 0.15);
+  --put-bg: rgba(239, 83, 80, 0.15);
+  --atm-bg: rgba(41, 98, 255, 0.3);
+  --primary-color: #2962FF;
+  --header-bg: #1e222d;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--panel-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+  background-color: var(--border-color);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: var(--panel-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #787b86;
+}
+
+.input-group input, .input-group select {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.input-group input:focus, .input-group select:focus {
+  border-color: var(--primary-color);
+}
+
+.btn-submit {
+  padding: 0.6rem 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  transition: background-color 0.2s;
+  height: 42px;
+}
+
+.btn-submit:hover {
+  background-color: #1E53E5;
+}
+
+.btn-submit:disabled {
+  background-color: #787b86;
+  cursor: not-allowed;
+}
+
+.summary-cards {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  min-width: 200px;
+  background-color: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: #787b86;
+  text-transform: uppercase;
+}
+
+.card .value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.table-container {
+  overflow-x: auto;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  max-height: 70vh;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+th {
+  background-color: var(--header-bg);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #787b86;
+  position: sticky;
+  top: 0;
+  text-transform: uppercase;
+  z-index: 10;
+}
+
+th.center, td.center {
+  text-align: center;
+}
+
+.strike-col {
+  background-color: var(--header-bg);
+  font-weight: 700;
+  text-align: center;
+}
+
+.call-data {
+  background-color: var(--call-bg);
+}
+
+.put-data {
+  background-color: var(--put-bg);
+}
+
+.text-call { color: var(--call-color); }
+.text-put { color: var(--put-color); }
+
+.text-primary { color: var(--primary-color); }
+
+tr:hover td {
+  background-color: rgba(120, 123, 134, 0.1);
+}
+
+.row-atm td {
+  border-top: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+  background-color: var(--atm-bg);
+}
+
+.loader {
+  display: none;
+  text-align: center;
+  padding: 3rem;
+  color: #787b86;
+}
+
+.error-msg {
+  display: none;
+  background-color: rgba(239, 83, 80, 0.1);
+  color: var(--put-color);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--put-color);
+  margin-bottom: 2rem;
+  text-align: center;
+}

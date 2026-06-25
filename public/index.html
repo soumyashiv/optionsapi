@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option Chain Viewer</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h1>📈 Option Chain Viewer</h1>
+        <button id="theme-toggle" class="theme-toggle">☀️ Light Mode</button>
+    </nav>
+
+    <main class="container">
+        <div class="controls">
+            <form id="fetch-form" style="display: flex; gap: 1rem; width: 100%; flex-wrap: wrap; align-items: flex-end;">
+                <div class="input-group">
+                    <label for="symbol">Symbol</label>
+                    <input type="text" id="symbol" placeholder="NIFTY, RELIANCE..." required value="NIFTY">
+                </div>
+                
+                <div class="input-group">
+                    <label for="exchange">Exchange</label>
+                    <select id="exchange">
+                        <option value="NSE" selected>NSE</option>
+                        <option value="BSE">BSE</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="is_index">Type</label>
+                    <select id="is_index">
+                        <option value="true" selected>Index</option>
+                        <option value="false">Equity</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-submit">Load Data</button>
+            </form>
+        </div>
+
+        <div id="loader" class="loader">
+            <h2>Fetching Market Data...</h2>
+        </div>
+
+        <div id="error-msg" class="error-msg"></div>
+
+        <div id="results" style="display: none;">
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>Symbol</h3>
+                    <p class="value" id="symbol-display">-</p>
+                </div>
+                <div class="card">
+                    <h3>Spot Price</h3>
+                    <p class="value text-call" id="spot-price">-</p>
+                </div>
+                <div class="card">
+                    <h3>ATM Strike</h3>
+                    <p class="value text-primary" id="atm-strike">-</p>
+                </div>
+                <div class="card">
+                    <h3>Expiry</h3>
+                    <p class="value" id="expiry-date">-</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="4" class="center call-data text-call" style="border-right: 1px solid var(--border-color);">CALLS</th>
+                            <th class="center strike-col">STRIKE</th>
+                            <th colspan="4" class="center put-data text-put" style="border-left: 1px solid var(--border-color);">PUTS</th>
+                        </tr>
+                        <tr>
+                            <th class="call-data">OI</th>
+                            <th class="call-data">Chng in OI</th>
+                            <th class="call-data">IV</th>
+                            <th class="call-data" style="border-right: 1px solid var(--border-color);">LTP</th>
+                            
+                            <th class="strike-col">Strike Price</th>
+                            
+                            <th class="put-data" style="border-left: 1px solid var(--border-color);">LTP</th>
+                            <th class="put-data">IV</th>
+                            <th class="put-data">Chng in OI</th>
+                            <th class="put-data">OI</th>
+                        </tr>
+                    </thead>
+                    <tbody id="chain-body">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="/app.js"></script>
+</body>
+</html>
